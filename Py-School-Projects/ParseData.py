@@ -24,17 +24,26 @@ raw_tournament_data = """
 
 def parse_tournament_data(raw_data):
     split_data = raw_data.split("\n")
-    lists = []
+    split_list = []
     for line in split_data:
-        if not
+        if not line.strip():
+            continue
         new_list = line.strip().lower().split(" | ")
-        lists.append(new_list)
+        try:
+            score = int(new_list[2])
+        except ValueError:
+            continue
+        new_list[2] = score
+        split_list.append(new_list)
 
     tuples = []
-    for single in lists:
+    for single in split_list:
         new_tuples = tuple(single)
         tuples.append(new_tuples)
     print(tuples)
     return tuples
 
 parse_tournament_data(raw_tournament_data)
+
+# expected output:
+# [('playerone', 'zelda', 3200, 'win'), ('playertwo', 'mario kart', 2800, 'loss'), ('playerthree', 'zelda', 4100, 'win'), ('playerfour', 'smash bros', 1900, 'loss'), ('playerfive', 'mario kart', 3600, 'win'), ('playerone', 'smash bros', 2100, 'win'), ('playerthree', 'mario kart', 3900, 'win'), ('playertwo', 'zelda', 3000, 'loss'), ('playerfour', 'zelda', 2200, 'loss'), ('playerfive', 'smash bros', 4500, 'win'), ('playertwo', 'smash bros', 2600, 'win'), ('playerthree', 'smash bros', 3700, 'win'), ('playerfour', 'mario kart', 1800, 'loss'), ('playerfive', 'zelda', 4000, 'win')]
