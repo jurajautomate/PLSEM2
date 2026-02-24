@@ -40,7 +40,6 @@ def parse_tournament_data(raw_data):
     for single in split_list:
         new_tuples = tuple(single)
         tuples.append(new_tuples)
-    print(tuples)
     return tuples
 
 parse_tournament_data(raw_tournament_data)
