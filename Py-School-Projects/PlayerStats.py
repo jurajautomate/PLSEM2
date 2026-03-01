@@ -20,14 +20,27 @@ raw_tournament_data = """
 
 data = parse_tournament_data(raw_tournament_data)
 
-player_stats = {}
-
-for id, *rest in data:
-    if not id in player_stats:
-        player_stats[id] = {"games_played": 1, "wins": 0, "losses": 0, "total_score": rest[1], "scores": rest[1]}
-        if rest[2] == "win":
-            player_stats[id]["wins"] = 1
+def build_player_stats(parsed_data):
+    """
+    Method to build a player's stats into a dict from the parsed tournement data. 
+    """
+    player_stats = {}
+    for player, *rest in parsed_data:
+        if not player in player_stats:
+            player_stats[player] = {"games_played": 1, "wins": 0, 
+            "losses": 0, "total_score": rest[1], "scores": [rest[1]]}
+            if rest[2] == "win":
+                player_stats[player]["wins"] = 1
+            else:
+                player_stats[player]["losses"] = 1
         else:
-            player_stats[id]["losses"] = 1
-    else:
-        
+            player_stats[player]["games_played"] += 1
+            if rest[2] == "win":
+                player_stats[player]["wins"] += 1
+            else:
+                player_stats[player]["losses"] += 1
+            player_stats[player]["total_score"] += rest[1]
+            player_stats[player]["scores"].append(rest[1])
+    return player_stats
+
+print(build_player_stats(data))
